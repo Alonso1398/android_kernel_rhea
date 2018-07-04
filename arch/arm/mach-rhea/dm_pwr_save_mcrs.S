@@ -45,7 +45,6 @@
 	 Account for a block to save DM_* configurations (fixed offset)
 	 Arguments in r0 and r1 saved after block initialisation*/
 		ADD	r0,r0,#DM_BLOCK
-		dormant_trace_save_a9regs r0
 		STR	SP, [r0], #4          @ save the stack pointer
 		STM	r0!,{r1-r12,r14}      @ save ARM registers (except PC)
 		SUB	r11,r0, #(DM_BLOCK + 4*14)@ preserve a copy of DORMANT_BASE
