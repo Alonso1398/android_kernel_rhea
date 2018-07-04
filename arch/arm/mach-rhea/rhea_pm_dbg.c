@@ -38,8 +38,6 @@
 #define GPIO_GPORC_BASE_PHYS    (GPIO2_BASE_ADDR + GPIO_GPORC0_OFFSET)
 #define GPIO_GPORC_BASE_VIRT    (KONA_GPIO2_VA + GPIO_GPORC0_OFFSET)
 
-#define SAVE_REG_OFFSET			(SZ_256)
-#define RESTORE_REG_OFFSET		(SZ_512)
 #define	RETENTION_TRACE_OFFSET		(SZ_1K)
 #define	WFI_TRACE_OFFSET		(SZ_2K)
 #define	TRACE_PATTERN_OFFSET		0 /* 1st word from offset */
@@ -148,8 +146,6 @@ static void dormant_profile_config(u32 on, u32 ns, u32 sec, u32 ref)
 u32 dorm_profile_enable;
 u32 *dormant_trace_v;
 u32 *dormant_trace_p;
-u32 *dormant_save;
-u32 *dormant_restore;
 
 u32 *ret_trace_v;
 u32 *wfi_trace_v;
@@ -330,14 +326,6 @@ static int param_get_debug(char *buffer, const struct kernel_param *kp)
  *                       DORMANT MODE INSTRUMENTATION                        *
  *****************************************************************************/
 
-void instrument_dormant_trace(u32 trace)
-{
-	if (dormant_trace_v)
-		*dormant_trace_v = trace;
-
-	dormant_profile_entry();
-}
-
 void instrument_dormant_entry(void)
 {
 	if (dormant_trace_v) {
@@ -504,8 +492,6 @@ int __init rhea_pmdbg_init(void)
 	dormant_trace_v = (u32 *) v;
 	dormant_trace_p = (u32 *) p;
 
-	dormant_save = (u32 *)((u32)dormant_trace_v + SAVE_REG_OFFSET);
-	dormant_restore = (u32 *)((u32)dormant_trace_v + RESTORE_REG_OFFSET);
 	ret_trace_v = (u32 *)((u32)dormant_trace_v + RETENTION_TRACE_OFFSET);
 	wfi_trace_v = (u32 *)((u32)dormant_trace_v + WFI_TRACE_OFFSET);
 

@@ -23,8 +23,8 @@
 #include <media/v4l2-chip-ident.h>
 #include <media/soc_camera.h>
 #include <linux/videodev2_brcm.h>
-#include <camdrv_ss.h>
-#include <camdrv_ss_sr300pc20.h>
+#include "camdrv_ss.h"
+#include "camdrv_ss_sr300pc20.h"
 
 
 #define SR300PC20_NAME	"sr300pc20"
@@ -53,7 +53,7 @@ static bool first_af_status = false;
 #define EXIF_MODEL		"GT-S6012"
 
 static DEFINE_MUTEX(af_cancel_op);
-extern inline struct camdrv_ss_state *to_state(struct v4l2_subdev *sd);
+extern struct camdrv_ss_state *to_state(struct v4l2_subdev *sd);
 
 
 extern  int camdrv_ss_i2c_set_config_register(struct i2c_client *client, 
@@ -62,7 +62,7 @@ extern  int camdrv_ss_i2c_set_config_register(struct i2c_client *client,
           				                 char *name);
 extern int camdrv_ss_set_preview_size(struct v4l2_subdev *sd);
 extern int camdrv_ss_set_dataline_onoff(struct v4l2_subdev *sd, int onoff);
-extern inline struct camdrv_ss_state *to_state(struct v4l2_subdev *sd);
+extern struct camdrv_ss_state *to_state(struct v4l2_subdev *sd);
 
 //#define __JPEG_CAPTURE__ 1        //denis_temp ; yuv capture
 
@@ -563,6 +563,14 @@ int camdrv_ss_sr300pc20_set_preview_start(struct v4l2_subdev *sd)
 			CAM_ERROR_PRINTK( "%s :sr300pc20_init_regs IS FAILED\n",__func__);
 			return -EIO;
 		}
+		 msleep(50);
+	}
+
+	/* Added delay for Entring camera to avoid flickring*/
+	if(state->mode_switch == INIT_DONE_TO_CAMERA_PREVIEW)
+	{
+		msleep(50);         
+ 
 	}
 /*
 	err = camdrv_ss_set_preview_size(sd);
@@ -2141,7 +2149,7 @@ bool camdrv_ss_sensor_init_main(bool bOn, struct camdrv_ss_sensor_cap *sensor)
 	
 	sensor->supported_capture_framesize_list  =  sr300pc20_supported_capture_framesize_list;
 	sensor->supported_number_of_capture_sizes = ARRAY_SIZE(sr300pc20_supported_capture_framesize_list);
-	sensor->skip_frames=2;
+	sensor->skip_frames=0;
 	sensor->fmts 				   = sr300pc20_fmts;
 	sensor->rows_num_fmts		   =ARRAY_SIZE(sr300pc20_fmts);
 

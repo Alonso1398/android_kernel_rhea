@@ -316,6 +316,11 @@ archclean:
 bp:;	$(Q)$(MAKE) $(build)=$(boot) MACHINE=$(MACHINE) $(boot)/bootpImage
 i zi:;	$(Q)$(MAKE) $(build)=$(boot) MACHINE=$(MACHINE) $@
 
+dtbs: prepare scripts
+$(Q)$(MAKE) $(build)=$(boot)/dts
+
+dtbs_install:
+$(Q)$(MAKE) $(dtbinst)=$(boot)/dts
 
 define archhelp
   echo  '* zImage        - Compressed kernel image (arch/$(ARCH)/boot/zImage)'

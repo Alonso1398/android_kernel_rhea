@@ -47,18 +47,6 @@
 #define DORMANT_RESTORE2_START      0xF3
 #define DORMANT_CTRL_PROG_START     0xE0
 #define DORMANT_CTRL_PROG_END       0xE1
-#define DORMANT_DBG_REGS_RESTORE    0xE2
-#define DORMANT_PMON_REGS_RESTORE   0xE3
-#define DORMANT_WARM_STRT_CONT	    0xE4
-#define DORMANT_DORMANT_ENTER	    0xE5
-#define DORMANT_RETURN		    0xE6
-#define DORMANT_RESTORE_PROC	    0xE7
-#define DORMANT_DISABLE_ENG_START	0xE8
-#define DORMANT_DISABLE_ENG_END		0xE9
-#define DORMANT_PLLARM_OFFSET_SAVE	0xEA
-#define DORMANT_POLICY_CTRL_GO		0xEB
-#define DORMANT_FREQ_CHANGE_START	0xEC
-#define DORMANT_FREQ_CHANGE_END		0xED
 
 #ifndef __ASSEMBLY__
 /**
@@ -141,7 +129,6 @@ extern void dbg_gpio_set(u32 gpio);
 extern void dbg_gpio_clr(u32 gpio);
 extern int rhea_force_sleep(suspend_state_t state);
 extern void request_suspend_state(suspend_state_t state);
-extern void instrument_dormant_trace(u32 trace);
 extern void instrument_dormant_entry(void);
 extern void instrument_dormant_exit(void);
 extern void instrument_wfi(int trace_path);
